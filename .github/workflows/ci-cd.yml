@@ -1,0 +1,44 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        cd app
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    
+    - name: Lint with flake8
+      run: |
+        cd app
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    
+    - name: Test Docker Compose
+      run: |
+        docker-compose config
+        
+    - name: Build Docker images
+      run: |
+        docker-compose build
+    
+    - name: Push Docker images (solo en main)
+      if: github.ref == 'refs/heads/main'
+      run: |
+        echo "Aquí se integraría el push a Docker Hub o GitHub Container Registry"
+        # Nota: Esto requeriría configurar credenciales como secretos de GitHub
