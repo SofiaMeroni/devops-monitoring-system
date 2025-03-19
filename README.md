@@ -76,5 +76,3 @@ Para personalizar este sistema:
 1. Modifica `app/app.py` para ajustar las métricas que deseas recopilar
 2. Actualiza `prometheus/prometheus.yml` para cambiar la configuración de recopilación
 3. Modifica o agrega dashboards en `grafana/dashboards/`
-
-4. borrar

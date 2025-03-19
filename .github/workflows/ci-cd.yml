@@ -29,13 +29,18 @@ jobs:
         cd app
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
     
+    - name: Verificar Docker y Compose
+      run: |
+        docker --version
+        docker compose version
+
     - name: Test Docker Compose
       run: |
-        docker-compose config
+        docker compose config
         
     - name: Build Docker images
       run: |
-        docker-compose build
+        docker compose build
     
     - name: Push Docker images (solo en main)
       if: github.ref == 'refs/heads/main'
