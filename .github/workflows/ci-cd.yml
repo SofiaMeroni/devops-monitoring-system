@@ -23,16 +23,22 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+#Se mueve a la carpeta app.
+#Actualiza pip (gestor de paquetes de Python).
+#Instala flake8 (herramienta de análisis de código) y pytest (framework de pruebas).
+#Si requirements.txt existe, instala las dependencias del proyecto.
     
     - name: Lint with flake8
       run: |
         cd app
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+# Analiza el código en busca de errores y problemas de estilo.      
     
     - name: Verificar Docker y Compose
       run: |
         docker --version
         docker compose version
+#Verifica que Docker y Compose estén instalados
 
     - name: Test Docker Compose
       run: |
@@ -41,9 +47,11 @@ jobs:
     - name: Build Docker images
       run: |
         docker compose build
+#Construye las imágenes de Docker
     
     - name: Push Docker images (solo en main)
       if: github.ref == 'refs/heads/main'
       run: |
         echo "Aquí se integraría el push a Docker Hub o GitHub Container Registry"
         # Nota: Esto requeriría configurar credenciales como secretos de GitHub
+#Publicar las imágenes en un registro de contenedores
