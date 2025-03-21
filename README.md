@@ -1,78 +1,112 @@
-# Sistema de Monitoreo DevOps
+Sistema de Monitoreo DevOps
+📊 Visión General
+Este proyecto implementa un sistema completo de monitorización de aplicaciones utilizando herramientas modernas de DevOps. Proporciona una solución end-to-end para instrumentar, recolectar y visualizar métricas de una aplicación web, todo containerizado y listo para implementarse con un solo comando.
+Mostrar imagen
+🧩 Componentes
+El sistema está compuesto por tres servicios principales:
+1. Aplicación Flask Instrumentada
 
-Este repositorio contiene un sistema completo de monitoreo de aplicaciones utilizando herramientas DevOps modernas. El proyecto implementa un stack de monitoreo que incluye:
+API web con endpoints para demostración (/, /api/data, /api/error)
+Endpoint /metrics que expone métricas para Prometheus
+Instrumentación completa con métricas como:
 
-- **Aplicación Flask** con métricas instrumentadas
-- **Prometheus** para recolección y almacenamiento de métricas
-- **Grafana** para visualización y alertas
+Contador de solicitudes HTTP por método, endpoint y código de estado
+Latencia de respuesta de solicitudes
+Solicitudes activas en tiempo real
+Simulación de uso de memoria
 
-## Arquitectura
 
-El sistema está compuesto por tres componentes principales:
 
-1. **Aplicación Flask**: Una API web simple que expone métricas de Prometheus.
-2. **Prometheus**: Recopila métricas de la aplicación y las almacena.
-3. **Grafana**: Visualiza las métricas recopiladas en dashboards interactivos.
+2. Prometheus
 
-![Arquitectura del Sistema](https://raw.githubusercontent.com/prometheus/prometheus/main/documentation/images/architecture.svg)
+Recolector y almacenamiento de series temporales
+Configurado para obtener métricas de la aplicación cada 15 segundos
+Punto central para la agregación de datos de monitoreo
 
-## Métricas Monitorizadas
+3. Grafana
 
-La aplicación Flask instrumentada proporciona las siguientes métricas:
+Visualización interactiva de métricas con dashboards preconfigados
+Alertas basadas en umbrales para latencia de solicitudes
+Paneles para todas las métricas clave de la aplicación
 
-- **Contador de solicitudes**: Total de solicitudes HTTP por método, endpoint y código de estado
-- **Latencia de solicitudes**: Tiempo de respuesta de las solicitudes HTTP
-- **Solicitudes activas**: Número de solicitudes siendo procesadas en un momento dado
-- **Uso de memoria**: Simulación de uso de memoria de la aplicación
+🔧 Tecnologías Utilizadas
 
-## Requisitos previos
+Containerización: Docker, Docker Compose
+Backend: Python 3.9, Flask, Gunicorn
+Monitorización: Prometheus, Grafana
+Instrumentación: prometheus_client para Python
+CI/CD: GitHub Actions
+Pruebas: Scripts de generación de tráfico para simular carga
 
-- Docker
-- Docker Compose
-- Python 3.6+
+🚀 Instalación y Uso
+Requisitos Previos
 
-## Instalación y Uso
+Docker y Docker Compose
+Git
+Python 3.6+ (solo para scripts de utilidad)
 
-### Configuración inicial
+Configuración Rápida
 
-1. Clona este repositorio:
-   ```
-   git clone https://github.com/tu-usuario/devops-monitoring-system.git
-   cd devops-monitoring-system
-   ```
+Clonar el repositorio:
+bashCopiargit clone https://github.com/tu-usuario/devops-monitoring-system.git
+cd devops-monitoring-system
 
-2. Ejecuta el script de configuración:
-   ```
-   python scripts/setup.py start
-   ```
+Iniciar el sistema:
+bashCopiarpython scripts/setup.py start
 
-### Acceso a los servicios
+Verificar el estado:
+bashCopiarpython scripts/setup.py status
 
-Una vez iniciado, los servicios estarán disponibles en:
+Generar tráfico de prueba (opcional):
+bashCopiarpython scripts/load-generator.py --duration 120 --rps 10
 
-- **Aplicación Flask**: http://localhost:5000
-- **Prometheus**: http://localhost:9090
-- **Grafana**: http://localhost:3000 (usuario: admin, contraseña: admin)
+Detener el sistema:
+bashCopiarpython scripts/setup.py stop
 
-### Comandos útiles
 
-- **Iniciar el sistema**: `python scripts/setup.py start`
-- **Detener el sistema**: `python scripts/setup.py stop`
-- **Verificar estado**: `python scripts/setup.py status`
+🖥️ Acceso a los Servicios
+Una vez en funcionamiento, puedes acceder a los servicios en:
 
-## Implementación CI/CD
+Aplicación Flask: http://localhost:5000
+Prometheus: http://localhost:9090
+Grafana: http://localhost:3000
 
-Este proyecto incluye un flujo de trabajo de GitHub Actions que realiza:
+Usuario: admin
+Contraseña: admin
 
-1. Verificación de sintaxis de Python
-2. Validación de la configuración de Docker Compose
-3. Construcción de imágenes Docker
-4. (Preparado para) Publicación de imágenes a registro de contenedores
 
-## Personalización
 
-Para personalizar este sistema:
+📈 Métricas y Dashboard
+El dashboard de Grafana preconfigurado incluye:
 
-1. Modifica `app/app.py` para ajustar las métricas que deseas recopilar
-2. Actualiza `prometheus/prometheus.yml` para cambiar la configuración de recopilación
-3. Modifica o agrega dashboards en `grafana/dashboards/`
+Panel de Latencia: Tiempo promedio de respuesta por endpoint con alertas
+Tasa de Solicitudes: Solicitudes por segundo, segregadas por código de estado
+Solicitudes Activas: Gauge en tiempo real de solicitudes en proceso
+Uso de Memoria: Tendencia de consumo de memoria simulado
+
+🔄 Integración Continua
+El proyecto incluye un flujo de trabajo de GitHub Actions que:
+
+Verifica la sintaxis de Python con Flake8
+Valida la configuración de Docker Compose
+Construye las imágenes Docker
+Está listo para publicar las imágenes en un registro de contenedores (requiere configuración adicional)
+
+🛠️ Estructura del Proyecto
+Copiardevops-monitoring-system/
+├── app/                      # Aplicación Flask
+│   ├── app.py                # Código de la aplicación con métricas
+│   ├── Dockerfile            # Instrucciones para construir la imagen
+│   └── requirements.txt      # Dependencias de Python
+├── prometheus/               # Configuración de Prometheus
+│   ├── Dockerfile
+│   └── prometheus.yml        # Configuración de recopilación
+├── grafana/                  # Configuración de Grafana
+│   ├── datasource.yml        # Configuración de fuente de datos
+│   └── dashboards/           # Dashboards preconfigados
+│       ├── dashboard.yml
+│       └── dashboard.json
+├── scripts/                  # Scripts de utilidad
+│   ├── setup.py              # Script para gestionar el sistema
+│   └── load-generator.py     # Generador de tráfico para pruebas
+└── docker-compose.yml        # Orquestación de los servicios
